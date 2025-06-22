@@ -1,6 +1,8 @@
 ![Python Version](https://img.shields.io/badge/Python-3.11%2B-blue.svg?style=flat&logo=python)
 
-Stock Analysis Multi-Agent
+## Stock Analysis Multi-Agent
+
+![Agent SDK Google.drawio 图示](/assets/Agent%20SDK%20Google.drawio.svg)
 
 ## Prerequisites
 
