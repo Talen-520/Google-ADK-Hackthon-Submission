@@ -1,3 +1,5 @@
+![Python Version](https://img.shields.io/badge/Python-3.11%2B-blue.svg?style=flat&logo=python)
+
 ## Inspiration
 Navigating the complexities of the financial markets often presents investors with challenges such as information overload, siloed analysis, and the need for timely decision-making. Traditional methods of acquiring and analyzing information can be time-consuming and struggle to integrate diverse market signals. Inspired by the ability of Multi-Agent Systems (MAS) to handle complex tasks and facilitate collaborative division of labor, we envisioned an AI system that could emulate a professional investment analysis team. This system aims to efficiently acquire, analyze, and present stock information through intelligent agent collaboration, thereby empowering users to make more informed investment decisions.
 
@@ -44,7 +46,7 @@ Throughout the development of this system, I learned:
 - **Asynchronous Process**: The system adopts an asynchronous processing model, where agents independently execute tasks and communicate results through asynchronous channels. This approach enables efficient parallelism and resource utilization, especially for tasks like data scraping and analysis, which can be time-consuming.
 
 ## What's Next for Stock Agent System
-In the future, we will continue to refine this Stock Agent System:
+In the future, I will continue to refine this Stock Agent System:
 
 - **Adding More Analytical Dimensions:** Consider integrating macroeconomic analysis, industry analysis, social media sentiment analysis, and other data sources and analytical perspectives.
 - **Enhancing Personalized Recommendations**: Provide more personalized stock recommendations and investment strategies based on user investment preferences and risk tolerance.
