@@ -53,3 +53,6 @@ In the future, I will continue to refine this Stock Agent System:
 - **Supporting More Trading Markets**: Expand support to major global stock markets beyond just Yahoo Finance.
 - **Introducing Visualization Tools**: Incorporate charts and visual interfaces to display analysis results and trends more intuitively.
 - **Real-time Interaction and Proactive Alerts**: Explore implementing more real-time market updates and intelligent alert functions based on user-defined settings.
+
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
