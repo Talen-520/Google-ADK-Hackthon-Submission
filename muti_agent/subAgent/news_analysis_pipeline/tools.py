@@ -1,18 +1,20 @@
 import asyncio
-import json
-from typing import List, Dict
+from typing import Dict, List
 from playwright.async_api import async_playwright, Browser, TimeoutError as PlaywrightTimeoutError
-
-# In your test.py, only this function needs to be updated.
 
 async def get_yahoo_article_content(browser: Browser, url: str) -> Dict[str, str]:
     """
     Extracts the main article content from a given Yahoo Finance URL.
-    This final version uses highly specific locators to avoid strict mode violations.
+    args:
+        browser: playwright browser
+        url: yahoo finance article url
+    return:
+        a dict with title, date, content, url, or error
     """
     page = await browser.new_page()
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=60000)
+        await page.goto(url, wait_until="load", timeout=60000)
+        # await page.goto(url, wait_until="domcontentloaded", timeout=60000)
 
         # Handle consent dialog (this logic is good)
         try:
@@ -71,19 +73,22 @@ async def get_yahoo_article_content(browser: Browser, url: str) -> Dict[str, str
 
 async def scrape_news(ticker: str, num_url: int = 5) -> List[Dict[str, str]]:
     """
-    为给定的股票代码从雅虎财经抓取新闻文章。
+    fetch news from yahoo finance
+    args:
+        ticker: stock ticker
+        num_url: number of news to fetch
+    return:
+        a list of news, each news is a dict with title, date, content, url, or error
     """
     print(f"Starting to scrape Yahoo Finance news for {ticker}")
     news_page_url = f"https://finance.yahoo.com/quote/{ticker}/news/"
     
     unique_article_urls = []
     async with async_playwright() as p:
-        # 优化4: 调试时使用 headless=False，完成时改回 True
         browser = await p.chromium.launch(headless=True) 
         page = await browser.new_page()
         
         try:
-            # ... (这部分逻辑保持不变，它工作得很好) ...
             await page.goto(news_page_url, wait_until="domcontentloaded", timeout=30000)
             await page.wait_for_selector('li.stream-item', timeout=20000)
             
@@ -123,8 +128,11 @@ async def scrape_news(ticker: str, num_url: int = 5) -> List[Dict[str, str]]:
     return articles
 
 async def main():
-    results = await scrape_news(ticker="APPL", num_url=3)
+    import json
+
+    results = await scrape_news(ticker="NVDA", num_url=3)
     print(json.dumps(results, indent=2, ensure_ascii=False))
 
 if __name__ == "__main__":
     asyncio.run(main())
+

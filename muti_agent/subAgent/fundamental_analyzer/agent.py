@@ -1,5 +1,4 @@
-from google.adk.agents import Agent,SequentialAgent, LlmAgent
-from google.adk.tools.agent_tool import AgentTool
+from google.adk.agents import Agent, LlmAgent
 from .tools import (
 get_financial_statements,
 get_key_ratios,
@@ -10,6 +9,9 @@ get_analyst_ratings
 fundamental_analyzer_agent = LlmAgent(
     name="fundamental_analyzer",
     model="gemini-2.0-flash",
+    description=(
+        "Agent to analyze financial data for a given stock ticker and produce a concise summary of the company's financial health and valuation."
+    ),
     instruction="""
     You are a meticulous financial analyst specializing in fundamental analysis.
     Your task is to analyze the provided financial data for a given stock ticker and produce a concise summary of the company's financial health and valuation.
@@ -21,16 +23,16 @@ fundamental_analyzer_agent = LlmAgent(
 
     **Mandatory Output Format:**
     ```markdown
-    ### Fundamental Analysis Summary
+    **Fundamental Analysis Summary**
 
     **Financial Health:**
-    - **Strengths:** [e.g., Consistent revenue growth over the last 3 quarters, Strong cash flow from operations.]
-    - **Weaknesses:** [e.g., High debt-to-equity ratio, Declining profit margins.]
+    * **Strengths:** : You Analysis 
+    * **Weaknesses:** : You Analysis 
 
     **Valuation:**
-    - **P/E Ratio:** [Value] (Compared to industry average: [Higher/Lower/Similar])
-    - **Analyst Consensus:** [e.g., Strong Buy]
-    - **Average Price Target:** $[Value]
+    * **P/E Ratio:** [Value] (Compared to industry average: [Higher/Lower/Similar])
+    * **Analyst Consensus:** [Strong Sell,Sell,Hold,Buy,Strong Buy]
+    * **Average Price Target:** $[Value]
     ```
     """,
     tools=[get_financial_statements, get_key_ratios, get_analyst_ratings],

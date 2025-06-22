@@ -1,4 +1,5 @@
 import yfinance as yf
+import pandas as pd
 
 # financial statements
 def get_financial_statements(ticker_symbol: str) -> dict:
@@ -14,12 +15,11 @@ def get_financial_statements(ticker_symbol: str) -> dict:
     def format_statement(statement_df):
         if statement_df.empty:
             return []
-        # The financial statement columns are Timestamps. We need to transpose,
-        # reset index, and format the new 'index' column (which contains the dates).
         df = statement_df.transpose()
         df.reset_index(inplace=True)
-        # The column with dates is now named 'index'. Convert it to string.
         df['index'] = df['index'].astype(str)
+        df = df.where(pd.notna(df), None)
+
         return df.to_dict(orient='records')
 
     return {
@@ -60,3 +60,8 @@ def get_analyst_ratings(ticker_symbol: str) -> dict:
         "targetHighPrice": info.get("targetHighPrice"),
         "targetLowPrice": info.get("targetLowPrice")
     }
+
+if __name__ == "__main__":
+    print(get_analyst_ratings("AAPL"))
+    print(get_financial_statements("AAPL"))
+    print(get_key_ratios("AAPL"))

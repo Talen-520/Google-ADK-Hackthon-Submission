@@ -14,11 +14,16 @@ import json
 async def get_yahoo_article_content(browser: Browser, url: str) -> Dict[str, str]:
     """
     Extracts the main article content from a given Yahoo Finance URL.
-    This final version uses highly specific locators to avoid strict mode violations.
+    args:
+        browser: playwright browser
+        url: yahoo finance article url
+    return:
+        a dict with title, date, content, url, or error
     """
     page = await browser.new_page()
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=60000)
+        await page.goto(url, wait_until="load", timeout=60000)
+        # await page.goto(url, wait_until="domcontentloaded", timeout=60000)
 
         # Handle consent dialog (this logic is good)
         try:
@@ -77,19 +82,22 @@ async def get_yahoo_article_content(browser: Browser, url: str) -> Dict[str, str
 
 async def scrape_news(ticker: str, num_url: int = 5) -> List[Dict[str, str]]:
     """
-    为给定的股票代码从雅虎财经抓取新闻文章。
+    fetch news from yahoo finance
+    args:
+        ticker: stock ticker
+        num_url: number of news to fetch
+    return:
+        a list of news, each news is a dict with title, date, content, url, or error
     """
     print(f"Starting to scrape Yahoo Finance news for {ticker}")
     news_page_url = f"https://finance.yahoo.com/quote/{ticker}/news/"
     
     unique_article_urls = []
     async with async_playwright() as p:
-        # 优化4: 调试时使用 headless=False，完成时改回 True
         browser = await p.chromium.launch(headless=True) 
         page = await browser.new_page()
         
         try:
-            # ... (这部分逻辑保持不变，它工作得很好) ...
             await page.goto(news_page_url, wait_until="domcontentloaded", timeout=30000)
             await page.wait_for_selector('li.stream-item', timeout=20000)
             
@@ -153,103 +161,6 @@ def get_current_time(timezone: str = "America/New_York") -> str:
     formatted_time = now_with_tz.strftime("%a, %b %d, %Y, %I:%M %p")
 
     return formatted_time
-
-# basic company info
-def get_company_profile(ticker_symbol: str) -> dict:
-    """
-    Retrieves basic company profile information from Yahoo Finance.
-    Args:
-        ticker_symbol (str): The stock ticker symbol (e.g., 'AAPL' for Apple Inc.).
-    Returns:
-        dict: A dictionary containing company profile information, including name, sector, industry, and summary.
-    """
-    ticker = yf.Ticker(ticker_symbol)
-    info = ticker.info
-    return {
-        "name": info.get("longName"),
-        "sector": info.get("sector"),
-        "industry": info.get("industry"),
-        "summary": info.get("longBusinessSummary")
-    }
-
-
-
-
-# stock price history (1 year)
-def get_historical_prices(ticker_symbol: str, period: str = "1y") -> dict:
-    """
-    Retrieves historical stock price data for a given ticker symbol.
-    Args:
-        ticker_symbol (str): The stock ticker symbol (e.g., 'AAPL' for Apple Inc.).
-        period (str, optional): The period for which to retrieve data (e.g., '1y' for 1 year). Defaults to '1y'.
-    Returns:
-        dict: A dictionary containing historical price data.
-    """
-    hist = yf.Ticker(ticker_symbol).history(period=period)
-    return hist.reset_index().to_dict(orient="records")
-
-
-
-# dividend info
-def get_dividend_info(ticker_symbol: str) -> dict:
-    """
-    Retrieves dividend information from Yahoo Finance.
-    Args:
-        ticker_symbol (str): The stock ticker symbol (e.g., 'AAPL' for Apple Inc.).
-    Returns:
-        dict: A dictionary containing dividend information.
-    """
-    info = yf.Ticker(ticker_symbol).info
-    return {
-        "dividendRate": info.get("dividendRate"),
-        "dividendYield": info.get("dividendYield"),
-        "exDividendDate": info.get("exDividendDate")
-    }
-
-
-def calculate_technical_indicators(ticker_symbol: str, indicators: Optional[List[str]] = None) -> dict:
-    """
-    Calculates technical indicators for a given ticker symbol.
-    Args:
-        ticker_symbol (str): The stock ticker symbol (e.g., 'AAPL' for Apple Inc.).
-        indicators (list, optional): A list of indicators to calculate. 
-                                     Defaults to ['SMA', 'RSI', 'MACD'].
-    Returns:
-        dict: A dictionary containing the calculated indicators.
-    """
-    # Set the default list inside the function if none is provided
-    if indicators is None:
-        indicators = ['SMA', 'RSI', 'MACD']
-
-    df = yf.Ticker(ticker_symbol).history(period="6mo")
-
-    result = {}
-    if df.empty:
-        return {"error": "No historical data found for ticker"}
-
-    # Helper function to format the series correctly
-    def format_indicator_series(series, name):
-        series = series.dropna().tail(5)
-        series.index = series.index.strftime('%Y-%m-%d') # Convert Timestamp index to string
-        return series.to_dict()
-
-
-    if 'SMA' in indicators:
-        df['SMA20'] = df['Close'].rolling(window=20).mean()
-        result['SMA20'] = format_indicator_series(df['SMA20'], 'SMA20')
-
-    if 'RSI' in indicators:
-        rsi_series = ta.momentum.RSIIndicator(close=df['Close'], window=14).rsi()
-        result['RSI'] = format_indicator_series(rsi_series, 'RSI')
-
-    if 'MACD' in indicators:
-        macd = ta.trend.MACD(close=df['Close'])
-        result['MACD'] = {
-            'macd': format_indicator_series(macd.macd(), 'MACD'),
-            'signal': format_indicator_series(macd.macd_signal(), 'MACD_Signal')
-        }
-
-    return result
 
 # earnings calendar
 def get_earnings_calendar(ticker_symbol: str) -> dict:
