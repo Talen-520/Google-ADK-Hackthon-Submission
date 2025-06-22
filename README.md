@@ -1,5 +1,30 @@
 ![Python Version](https://img.shields.io/badge/Python-3.11%2B-blue.svg?style=flat&logo=python)
 
+## Prerequisites
+
+- Python 3.11+
+- Google API Key
+- MacOS system  (windows not tested)
+## Installation
+
+clone this repo then install the requirements
+```bash
+pip install -r requirements.txt
+```
+
+replace `.env.example` to `.env` and add your google api key
+
+## Start the demo with google web adk
+```bash
+adk web
+```
+
+try prompt:
+```bash
+# what happened to nvidia recently?
+```
+
+
 ## Inspiration
 Navigating the complexities of the financial markets often presents investors with challenges such as information overload, siloed analysis, and the need for timely decision-making. Traditional methods of acquiring and analyzing information can be time-consuming and struggle to integrate diverse market signals. Inspired by the ability of Multi-Agent Systems (MAS) to handle complex tasks and facilitate collaborative division of labor, we envisioned an AI system that could emulate a professional investment analysis team. This system aims to efficiently acquire, analyze, and present stock information through intelligent agent collaboration, thereby empowering users to make more informed investment decisions.
 
