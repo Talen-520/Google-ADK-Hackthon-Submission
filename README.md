@@ -1,5 +1,7 @@
 ![Python Version](https://img.shields.io/badge/Python-3.11%2B-blue.svg?style=flat&logo=python)
 
+Stock Analysis Multi-Agent
+
 ## Prerequisites
 
 - Python 3.11+
