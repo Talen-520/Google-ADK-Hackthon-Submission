@@ -4,10 +4,7 @@ from .subAgent.fundamental_analyzer.agent import fundamental_analyzer_agent
 from .subAgent.technical_analyzer.agent import technical_analyzer
 from .subAgent.news_analysis_pipeline.agent import news_analysis_pipeline
 from .prompt import ROOT_AGENT_PROMPT
-from .tools import (
- scrape_news, 
- get_current_time, 
-)
+from .tools import get_current_time
 
 root_agent = LlmAgent(
     name="Stock_Agent",
@@ -21,5 +18,6 @@ root_agent = LlmAgent(
     tools=[
         AgentTool(agent=technical_analyzer),
         AgentTool(agent=fundamental_analyzer_agent),  
+        get_current_time
         ],
 )
