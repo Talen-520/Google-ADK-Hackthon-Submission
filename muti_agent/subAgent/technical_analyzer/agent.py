@@ -6,6 +6,7 @@ from .tools import (
 
 technical_analyzer = LlmAgent(
     name="technical_analyzer",
+    model="gemini-2.0-flash",
     description=(
         "Agent to analyze historical price and technical indicators for a given stock ticker."
     ),
