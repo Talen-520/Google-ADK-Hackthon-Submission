@@ -7,16 +7,20 @@
 ## Prerequisites
 
 - Python 3.11+
-- Google API Key
+- Google AI API Key
 - MacOS system  (windows not tested)
 ## Installation
-
+create venv
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 clone this repo then install the requirements
 ```bash
 pip install -r requirements.txt
 ```
 
-replace `.env.example` to `.env` and add your google api key
+replace `.env.example` to `.env` and add update your  google api key
 
 ## Start the demo with google web adk
 ```bash
@@ -26,6 +30,7 @@ adk web
 try prompt:
 ```bash
 # what happened to nvidia recently?
+# why nvidia soar today?
 ```
 
 
